@@ -9,7 +9,7 @@
             <h1>
                 <i class="fas fa-list me-2"></i>Commissions
             </h1>
-            <a href="/admin/commissions/commission/add/" class="btn btn-primary">
+            <a href="/admin/commissions/commission/add/" class="btn btn-purple">
                 <i class="fas fa-plus me-1"></i>Add Commission
             </a>
         </div>
@@ -40,7 +40,7 @@
                     <div class="col-md-2">
                         <label class="form-label">&nbsp;</label>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-outline-primary">
+                            <button type="submit" class="btn btn-outline-purple">
                                 <i class="fas fa-search me-1"></i>Filter
                             </button>
                         </div>
@@ -53,11 +53,11 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 {% if commissions %}
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover animate__animated animate__fadeInUp" data-aos="fade-up">
                             <thead>
                                 <tr>
                                     <th>Title</th>
@@ -106,7 +106,7 @@
                                     <td>
                                         <div class="btn-group btn-group-sm">
                                             <a href="{% url 'commissions:commission_detail' commission.pk %}" 
-                                               class="btn btn-outline-primary" title="View Details">
+                                               class="btn btn-outline-purple" title="View Details">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             <a href="/admin/commissions/commission/{{ commission.pk }}/change/" 
@@ -126,12 +126,12 @@
                         <h5 class="text-muted">No commissions found</h5>
                         {% if search_query or status_filter %}
                             <p class="text-muted">Try adjusting your search criteria.</p>
-                            <a href="{% url 'commissions:commission_list' %}" class="btn btn-outline-primary">
+                            <a href="{% url 'commissions:commission_list' %}" class="btn btn-outline-purple">
                                 <i class="fas fa-times me-1"></i>Clear Filters
                             </a>
                         {% else %}
                             <p class="text-muted">Get started by adding your first commission.</p>
-                            <a href="/admin/commissions/commission/add/" class="btn btn-primary">
+                            <a href="/admin/commissions/commission/add/" class="btn btn-purple">
                                 <i class="fas fa-plus me-1"></i>Add Commission
                             </a>
                         {% endif %}
