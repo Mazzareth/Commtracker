@@ -13,7 +13,7 @@
 
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="card bg-warning text-dark">
+        <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-info text-white">
+        <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-success text-white">
+        <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-primary text-white">
+        <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -76,19 +76,19 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                     <i class="fas fa-list me-2"></i>Recent Commissions
                 </h5>
-                <a href="{% url 'commissions:commission_list' %}" class="btn btn-primary btn-sm">
+                <a href="{% url 'commissions:commission_list' %}" class="btn btn-purple btn-sm">
                     <i class="fas fa-eye me-1"></i>View All
                 </a>
             </div>
             <div class="card-body">
                 {% if recent_commissions %}
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover animate__animated animate__fadeInUp" data-aos="fade-up">
                             <thead>
                                 <tr>
                                     <th>Title</th>

@@ -1,0 +1,204 @@
+/* --- Commissions Dark Theme & Purple Accent Style --- */
+:root {
+    --brand-purple: #bb86fc;
+    --brand-purple-light: #d1a3ff;
+    --brand-purple-border: #bb86fc40;
+    --bg-black: #000;
+    --bg-dark-card: #1e1e1e;
+    --navbar-dark: #121212;
+    --text-light: #f5f5f5;
+    --text-muted: #b3b3b3;
+    --transition-base: 0.2s cubic-bezier(.4,0,.2,1);
+    --shadow-purple: 0 2px 12px 0 #bb86fc40;
+}
+
+/* General */
+body.bg-black {
+    background: var(--bg-black) !important;
+    color: var(--text-light);
+}
+.text-light { color: var(--text-light) !important; }
+.text-purple { color: var(--brand-purple) !important; }
+
+/* Navbar */
+.navbar,
+.navbar.bg-dark,
+.navbar-dark {
+    background: var(--navbar-dark) !important;
+    border-bottom: 1px solid var(--brand-purple-border);
+}
+.navbar-brand,
+.navbar .navbar-brand {
+    color: var(--brand-purple) !important;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.navbar-brand .fa-chart-line {
+    color: var(--brand-purple) !important;
+}
+
+/* Cards */
+.card {
+    background: var(--bg-dark-card) !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--brand-purple-border) !important;
+    border-radius: 1rem;
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--brand-purple-border) !important;
+}
+.card:hover, .table-hover tbody tr:hover, .form-control:focus, .form-select:focus {
+    box-shadow: 0 4px 24px 0 var(--brand-purple-border), var(--shadow-purple);
+    transform: translateY(-4px);
+}
+
+/* Buttons */
+.btn-purple,
+.btn.btn-purple {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    border: 1px solid var(--brand-purple);
+    transition: background var(--transition-base), color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+    box-shadow: none;
+}
+.btn-purple:hover, .btn-purple:focus {
+    background: var(--brand-purple-light) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border);
+    transform: translateY(-2px);
+}
+.btn-outline-purple,
+.btn.btn-outline-purple {
+    background: transparent !important;
+    color: var(--brand-purple) !important;
+    border: 1px solid var(--brand-purple);
+    transition: background var(--transition-base), color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+}
+.btn-outline-purple:hover, .btn-outline-purple:focus {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border);
+    transform: translateY(-2px);
+}
+
+/* Bootstrap button overrides - map primary to purple for legacy */
+.btn-primary, .btn.btn-primary {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    border: 1px solid var(--brand-purple) !important;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background: var(--brand-purple-light) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border);
+}
+
+.btn-outline-primary, .btn.btn-outline-primary {
+    background: transparent !important;
+    color: var(--brand-purple) !important;
+    border: 1px solid var(--brand-purple) !important;
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border);
+}
+
+/* Secondary/outline-secondary: gray */
+.btn-outline-secondary, .btn.btn-outline-secondary {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid #444 !important;
+}
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+    background: #222 !important;
+    color: var(--text-light) !important;
+}
+
+/* Table & Form Styling */
+.table, .table-hover tbody tr {
+    background: var(--bg-dark-card) !important;
+    color: var(--text-light) !important;
+    border-color: var(--brand-purple-border);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.table thead th, .table th {
+    color: var(--brand-purple) !important;
+    border-bottom: 2px solid var(--brand-purple-border);
+}
+.table td, .table th {
+    border-color: var(--brand-purple-border) !important;
+}
+.table-hover tbody tr:hover {
+    background: #232323 !important;
+}
+
+/* Form controls */
+.form-control, .form-select {
+    background: #232323 !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--brand-purple-border) !important;
+    transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--brand-purple) !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border) !important;
+    background: #232323;
+    color: var(--text-light);
+}
+
+/* Badges - color coded for status, but purple for "Total" */
+.badge.bg-warning, .badge.bg-info, .badge.bg-success, .badge.bg-secondary {
+    color: #000 !important;
+    font-weight: 600;
+    background: var(--brand-purple) !important;
+    border: 1px solid var(--brand-purple-border);
+}
+.badge.bg-warning.text-dark { background: #fbc02d !important; color: #000 !important; }
+.badge.bg-info { background: #29b6f6 !important; color: #fff !important; }
+.badge.bg-success { background: #66bb6a !important; color: #fff !important; }
+.badge.bg-secondary { background: #616161 !important; color: #fff !important; }
+.badge.bg-primary { background: var(--brand-purple) !important; color: #000 !important; }
+
+/* Alert override */
+.alert {
+    background: #191927 !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--brand-purple-border);
+}
+
+/* Animations and AOS fade-up support */
+[data-aos="fade-up"] {
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-duration: 0.6s;
+}
+[data-aos="fade-up"].aos-animate {
+    opacity: 1;
+    transform: translateY(0px);
+}
+.animate__animated.animate__fadeInUp {
+    animation-duration: 0.8s;
+    animation-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+/* Utility */
+.rounded-xl { border-radius: 1rem !important; }
+.shadow-purple { box-shadow: 0 2px 20px 0 var(--brand-purple-border) !important; }
+
+/* Misc */
+a, a.text-decoration-none {
+    color: var(--brand-purple);
+    transition: color var(--transition-base);
+}
+a:hover { color: var(--brand-purple-light); }
+::-webkit-scrollbar {
+    background: #191919;
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--brand-purple-border);
+    border-radius: 6px;
+}
