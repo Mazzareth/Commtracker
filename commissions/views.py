@@ -1,4 +1,21 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q
+
+from .models import Commission
+
+def commission_list(request):
+    search_query = request.GET.get('q', '')
+    if search_query:
+        # Search by title or client fields (nickname, handle, or email)
+        commissions = Commission.objects.filter(
+            Q(title__icontains=search_query) |
+            Q(client__nickname__icontains=search_query) |
+            Q(client__handle__icontains=search_query) |
+            Q(client__email__icontains=search_query)
+        )
+    else:
+        commissions = Commission.objects.all()
+    return render(request, 'commissions/commission_list.html', {'commissions': commissions})
 from django.contrib import messages
 from django.db.models import Q
 from .models import Commission
