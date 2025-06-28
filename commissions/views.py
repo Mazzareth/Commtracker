@@ -16,6 +16,13 @@ def commission_list(request):
     else:
         commissions = Commission.objects.all()
     return render(request, 'commissions/commission_list.html', {'commissions': commissions})
+
+def commission_detail(request, commission_id):
+    commission = get_object_or_404(Commission, pk=commission_id)
+    return render(request, 'commissions/commission_detail.html', {'commission': commission})
+
+def home(request):
+    return render(request, 'commissions/home.html')
 from django.contrib import messages
 from django.db.models import Q
 from .models import Commission

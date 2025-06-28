@@ -39,6 +39,7 @@ class Commission(models.Model):
     due_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # ... (other original fields like characters, tags, etc. remain unchanged)
 
     @property
     def client_name(self):
