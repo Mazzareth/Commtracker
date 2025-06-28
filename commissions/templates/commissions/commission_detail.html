@@ -1,0 +1,170 @@
+{% extends 'commissions/base.html' %}
+
+{% block title %}{{ commission.title }} - Commissions Tracker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-file-alt me-2"></i>{{ commission.title }}
+            </h1>
+            <div>
+                <a href="{% url 'commissions:commission_list' %}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-arrow-left me-1"></i>Back to List
+                </a>
+                <a href="/admin/commissions/commission/{{ commission.pk }}/change/" class="btn btn-primary">
+                    <i class="fas fa-edit me-1"></i>Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Commission Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Title:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ commission.title }}
+                    </div>
+                </div>
+                
+                {% if commission.description %}
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Description:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ commission.description|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Client Name:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ commission.client_name }}
+                    </div>
+                </div>
+                
+                {% if commission.client_email %}
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Client Email:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <a href="mailto:{{ commission.client_email }}">{{ commission.client_email }}</a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Amount:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <span class="h5 text-success">${{ commission.amount }}</span>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Status:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <span class="badge 
+                            {% if commission.status == 'pending' %}bg-warning text-dark
+                            {% elif commission.status == 'in_progress' %}bg-info
+                            {% elif commission.status == 'completed' %}bg-success
+                            {% else %}bg-secondary
+                            {% endif %} fs-6">
+                            {{ commission.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                
+                {% if commission.notes %}
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Notes:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ commission.notes|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar me-2"></i>Timeline
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Created:</strong><br>
+                    <span class="text-muted">{{ commission.created_at|date:"F d, Y \a\t g:i A" }}</span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Last Updated:</strong><br>
+                    <span class="text-muted">{{ commission.updated_at|date:"F d, Y \a\t g:i A" }}</span>
+                </div>
+                
+                {% if commission.due_date %}
+                <div class="mb-3">
+                    <strong>Due Date:</strong><br>
+                    <span class="text-muted">{{ commission.due_date|date:"F d, Y" }}</span>
+                </div>
+                {% endif %}
+                
+                {% if commission.completed_date %}
+                <div class="mb-3">
+                    <strong>Completed:</strong><br>
+                    <span class="text-success">{{ commission.completed_date|date:"F d, Y" }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-tools me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/admin/commissions/commission/{{ commission.pk }}/change/" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i>Edit Commission
+                    </a>
+                    {% if commission.client_email %}
+                    <a href="mailto:{{ commission.client_email }}?subject=Re: {{ commission.title }}" class="btn btn-outline-primary">
+                        <i class="fas fa-envelope me-1"></i>Email Client
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'commissions:commission_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-list me-1"></i>View All Commissions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

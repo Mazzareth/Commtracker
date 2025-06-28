@@ -1,0 +1,144 @@
+{% extends 'commissions/base.html' %}
+
+{% block title %}Commissions - Commissions Tracker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-list me-2"></i>Commissions
+            </h1>
+            <a href="/admin/commissions/commission/add/" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Add Commission
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Search by title, client, or description...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">All Statuses</option>
+                            {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fas fa-search me-1"></i>Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                {% if commissions %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Client</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Due Date</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commission in commissions %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ commission.title }}</strong>
+                                        {% if commission.description %}
+                                            <br><small class="text-muted">{{ commission.description|truncatechars:50 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ commission.client_name }}
+                                        {% if commission.client_email %}
+                                            <br><small class="text-muted">{{ commission.client_email }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td><strong>${{ commission.amount }}</strong></td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if commission.status == 'pending' %}bg-warning text-dark
+                                            {% elif commission.status == 'in_progress' %}bg-info
+                                            {% elif commission.status == 'completed' %}bg-success
+                                            {% else %}bg-secondary
+                                            {% endif %}">
+                                            {{ commission.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if commission.due_date %}
+                                            {{ commission.due_date|date:"M d, Y" }}
+                                        {% else %}
+                                            <span class="text-muted">Not set</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ commission.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'commissions:commission_detail' commission.pk %}" 
+                                               class="btn btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="/admin/commissions/commission/{{ commission.pk }}/change/" 
+                                               class="btn btn-outline-secondary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No commissions found</h5>
+                        {% if search_query or status_filter %}
+                            <p class="text-muted">Try adjusting your search criteria.</p>
+                            <a href="{% url 'commissions:commission_list' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-times me-1"></i>Clear Filters
+                            </a>
+                        {% else %}
+                            <p class="text-muted">Get started by adding your first commission.</p>
+                            <a href="/admin/commissions/commission/add/" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Add Commission
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

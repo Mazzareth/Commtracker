@@ -1,0 +1,137 @@
+{% extends 'commissions/base.html' %}
+
+{% block title %}Dashboard - Commissions Tracker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+        </h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Pending</h5>
+                        <h2 class="mb-0">{{ total_pending }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">In Progress</h5>
+                        <h2 class="mb-0">{{ total_in_progress }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-spinner fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Completed</h5>
+                        <h2 class="mb-0">{{ total_completed }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Total</h5>
+                        <h2 class="mb-0">{{ total_pending|add:total_in_progress|add:total_completed }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chart-bar fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Recent Commissions
+                </h5>
+                <a href="{% url 'commissions:commission_list' %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-eye me-1"></i>View All
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_commissions %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Client</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commission in recent_commissions %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'commissions:commission_detail' commission.pk %}" class="text-decoration-none">
+                                            {{ commission.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ commission.client_name }}</td>
+                                    <td>${{ commission.amount }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if commission.status == 'pending' %}bg-warning text-dark
+                                            {% elif commission.status == 'in_progress' %}bg-info
+                                            {% elif commission.status == 'completed' %}bg-success
+                                            {% else %}bg-secondary
+                                            {% endif %}">
+                                            {{ commission.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ commission.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No commissions yet. <a href="/admin/">Add one in the admin panel</a>.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
