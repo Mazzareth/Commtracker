@@ -1,0 +1,15 @@
+@echo off
+ECHO.
+ECHO >>> PULLING LATEST CHANGES FROM GITHUB...
+git pull
+
+ECHO.
+ECHO >>> INSTALLING/UPDATING PYTHON PACKAGES...
+pip install -r requirements.txt
+
+ECHO.
+ECHO >>> RUNNING DATABASE MIGRATIONS...
+python manage.py migrate
+
+ECHO.
+ECHO >>> UPDATE COMPLETE!

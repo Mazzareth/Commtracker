@@ -15,7 +15,7 @@ class Client(models.Model):
 class Character(models.Model):
     """A character (OC) belonging to a client."""
     name = models.CharField(max_length=100)
-    client = models.ForeignKey(Client, related_name='characters', on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, related_name='characters', on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField(blank=True)
     reference_url = models.URLField(blank=True)
 
@@ -45,7 +45,7 @@ class Commission(models.Model):
     
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    client = models.ForeignKey(Client, related_name='commissions', on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, related_name='commissions', on_delete=models.CASCADE, null=True, blank=True)
     characters = models.ManyToManyField(Character, related_name='commissions', blank=True)
     tags = models.ManyToManyField(Tag, related_name='commissions', blank=True)
     amount = models.DecimalField(
