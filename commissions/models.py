@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from decimal import Decimal
 
 class Client(models.Model):
     """A client/customer in the CRM."""
@@ -52,7 +51,7 @@ class Commission(models.Model):
     amount = models.DecimalField(
         max_digits=10, 
         decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))]
+        validators=[MinValueValidator(0)]
     )
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='sketch')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
@@ -62,8 +61,16 @@ class Commission(models.Model):
     completed_date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
     
-    class Meta:
-        ordering = ['-created_at']
-    
     def __str__(self):
         return f"{self.title} - {self.client.nickname} (${self.amount})"
+
+    @property
+    def client_name(self):
+        return self.client.nickname
+
+    @property
+    def client_email(self):
+        return self.client.email
+
+    class Meta:
+        ordering = ['-created_at']

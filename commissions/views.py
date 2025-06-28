@@ -6,21 +6,23 @@ from .models import Commission
 
 def commission_list(request):
     commissions = Commission.objects.all()
-    
+
     # Search functionality
     search_query = request.GET.get('search')
     if search_query:
         commissions = commissions.filter(
             Q(title__icontains=search_query) |
-            Q(client_name__icontains=search_query) |
+            Q(client__nickname__icontains=search_query) |
+            Q(client__handle__icontains=search_query) |
+            Q(client__email__icontains=search_query) |
             Q(description__icontains=search_query)
         )
-    
+
     # Filter by status
     status_filter = request.GET.get('status')
     if status_filter:
         commissions = commissions.filter(status=status_filter)
-    
+
     context = {
         'commissions': commissions,
         'search_query': search_query,
@@ -40,7 +42,7 @@ def home(request):
     total_pending = Commission.objects.filter(status='pending').count()
     total_in_progress = Commission.objects.filter(status='in_progress').count()
     total_completed = Commission.objects.filter(status='completed').count()
-    
+
     context = {
         'recent_commissions': recent_commissions,
         'total_pending': total_pending,
