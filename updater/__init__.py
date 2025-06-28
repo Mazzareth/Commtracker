@@ -1,0 +1,1 @@
+# updater app init
