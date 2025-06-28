@@ -84,3 +84,71 @@ commissions_tracker/
 ├── manage.py             # Django management script
 └── requirements.txt      # Python dependencies
 ```
+
+## Automatic GitHub Updates
+
+You can enable automatic updating of your deployment from GitHub using the built-in updater app. There are two approaches: webhook-based and polling.
+
+### Webhook Approach
+
+1. **Configure GitHub Webhook**  
+   Set up a webhook in your GitHub repository to POST to:  
+   ```
+   http(s)://<your-server>/github-webhook/
+   ```
+   Recommended: Add a secret and set it as the environment variable `GITHUB_WEBHOOK_SECRET` or in your Django settings as `GITHUB_WEBHOOK_SECRET`.
+
+2. **How it works**  
+   - On each push, GitHub will send a payload to `/github-webhook/`.
+   - The updater verifies the signature (if secret is set), fetches new commits, installs dependencies, runs migrations, and restarts the server process.
+
+3. **Supported Events**
+   - `push`: Triggers update process (async, so request returns immediately).
+   - `ping`: Returns "pong" for GitHub webhook setup/testing.
+   - All others: Ignored.
+
+### Polling Approach
+
+You may run a background process that periodically checks for updates and applies them automatically.
+
+- **Run the updater**:
+  ```bash
+  python manage.py github_auto_updater --interval 60
+  ```
+  This will check every 60 seconds for new commits on the upstream branch.
+- If an update is found, the project will:
+  1. Pull new code (`git pull --rebase`)
+  2. Install dependencies (`pip install -r requirements.txt`)
+  3. Run migrations (`python manage.py migrate`)
+  4. Restart the Python process so new code is loaded
+
+- This command is designed to be run under a process manager like systemd or Supervisor for reliability.
+
+#### Example systemd unit
+
+```
+[Unit]
+Description=Django GitHub Auto-Updater
+
+[Service]
+WorkingDirectory=/path/to/your/project
+ExecStart=/usr/bin/python3 manage.py github_auto_updater --interval 60
+Restart=always
+User=youruser
+Environment=GITHUB_WEBHOOK_SECRET=your_webhook_secret
+Environment=DJANGO_SETTINGS_MODULE=commissions_tracker.settings
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Environment Variables
+
+- **GITHUB_WEBHOOK_SECRET** (optional but recommended):  
+   Secret string for verifying GitHub webhook payloads (HMAC-SHA256).
+
+## Enabling the Updater
+
+- The updater app is included in `INSTALLED_APPS` and its URLs are wired at the root.
+- Webhook endpoint: `/github-webhook/`
+- Polling command: `python manage.py github_auto_updater --interval 60` (run as a service for continuous polling).

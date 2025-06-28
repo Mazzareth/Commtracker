@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('updater.urls')),  # updater URLs take precedence
     path('', include('commissions.urls')),
 ]
