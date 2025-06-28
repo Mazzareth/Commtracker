@@ -33,9 +33,6 @@ class Commission(models.Model):
     completed_date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
 
-    class Meta:
-        ordering = ['-created_at']
-
     def __str__(self):
         return self.title
 
@@ -46,3 +43,6 @@ class Commission(models.Model):
     @property
     def client_email(self):
         return self.client.email
+
+    class Meta:
+        ordering = ['-created_at']
