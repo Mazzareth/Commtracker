@@ -79,7 +79,16 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {{ commission.client_name }}
+                                        {% if commission.client %}
+                                            <a href="{% url 'commissions:client_detail' commission.client.pk %}" class="text-purple">
+                                                <strong>{{ commission.client.nickname }}</strong>
+                                            </a>
+                                            {% if commission.client.handle %}
+                                                <br><small class="text-muted">{{ commission.client.handle }}</small>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="text-muted">—</span>
+                                        {% endif %}
                                         {% if commission.client_email %}
                                             <br><small class="text-muted">{{ commission.client_email }}</small>
                                         {% endif %}
