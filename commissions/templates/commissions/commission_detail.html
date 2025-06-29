@@ -55,7 +55,13 @@
                         <strong>Client Name:</strong>
                     </div>
                     <div class="col-sm-9">
-                        {{ commission.client_name }}
+                        {% if commission.client %}
+                            <a href="{% url 'commissions:client_detail' commission.client.pk %}" class="text-purple">
+                                {{ commission.client.nickname }}
+                            </a>
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
                     </div>
                 </div>
                 
