@@ -15,64 +15,99 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <!-- Custom commissions theme -->
     <link href="{% static 'commissions/css/style.css' %}" rel="stylesheet">
+    <!-- New app shell & sidebar styles -->
+    <link href="{% static 'commissions/css/app.css' %}" rel="stylesheet">
+    <!-- HTMX for reactivity -->
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body data-bs-theme="dark" class="bg-black text-light font-inter">
-    <nav class="navbar navbar-expand-lg navbar-dark glass-navbar">
-        <div class="container">
-            <a class="navbar-brand text-purple" href="{% url 'commissions:home' %}" aria-label="Homepage">
-                <i class="fas fa-chart-line me-2"></i>Commissions Tracker
+<body data-bs-theme="dark" class="bg-black text-light font-inter" hx-boost="true">
+    <div class="app-shell d-flex">
+        <!-- Sidebar -->
+        <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Open navigation" type="button">
+            <i class="fas fa-bars"></i>
+        </button>
+        <aside id="sidebar">
+            <a href="{% url 'commissions:home' %}" class="sidebar-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>CommTracker</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'commissions:home' %}">
-                            <i class="fas fa-home me-1"></i>Dashboard
+            <nav>
+                <ul class="sidebar-links">
+                    <li>
+                        <a href="{% url 'commissions:home' %}" class="sidebar-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'home' %}page{% endif %}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'commissions:client_list' %}">
-                            <i class="fas fa-users me-1"></i>Clients
+                    <li>
+                        <a href="{% url 'commissions:client_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'client_list' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'client_list' %}page{% endif %}">
+                            <i class="fas fa-users"></i>
+                            <span>Clients</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'commissions:commission_list' %}">
-                            <i class="fas fa-list me-1"></i>Commissions
+                    <li>
+                        <a href="{% url 'commissions:commission_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'commission_list' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'commission_list' %}page{% endif %}">
+                            <i class="fas fa-list"></i>
+                            <span>Commissions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/" class="sidebar-link" target="_blank">
+                            <i class="fas fa-cog"></i>
+                            <span>Admin</span>
                         </a>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/">
-                            <i class="fas fa-cog me-1"></i>Admin
-                        </a>
-                    </li>
-                </ul>
+            </nav>
+            <div class="sidebar-footer mt-4">
+                <span style="opacity:0.7;">&copy; {% now "Y" %} CommTracker</span>
             </div>
-        </div>
-    </nav>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-grow-1 px-4 py-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-    <main class="container mt-4">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        {% block content %}
-        {% endblock %}
-    </main>
-
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
       AOS.init({ once: true, duration: 600, });
+    </script>
+    <!-- Sidebar mobile toggle -->
+    <script>
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      function closeSidebarOnBackdrop(e) {
+          if (window.innerWidth < 992 && sidebar.classList.contains('sidebar-open')) {
+              if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                  sidebar.classList.remove('sidebar-open');
+              }
+          }
+      }
+      toggleBtn?.addEventListener('click', function() {
+          sidebar.classList.toggle('sidebar-open');
+      });
+      // Click outside closes sidebar on mobile
+      document.addEventListener('click', closeSidebarOnBackdrop);
+      // On resize, auto-close sidebar if needed
+      window.addEventListener('resize', function() {
+          if (window.innerWidth >= 992) {
+              sidebar.classList.remove('sidebar-open');
+          }
+      });
     </script>
 </body>
 </html>

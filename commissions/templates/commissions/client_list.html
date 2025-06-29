@@ -3,8 +3,8 @@
 {% block title %}Clients - Commissions Tracker{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
+<div class="panel-container d-flex gap-4 flex-wrap flex-md-nowrap">
+    <div class="list-panel">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>
                 <i class="fas fa-users me-2"></i>Clients
@@ -13,14 +13,10 @@
                 <i class="fas fa-plus me-1"></i>Add Client
             </a>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
         <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 {% if clients %}
-                    <div class="table-responsive">
+                    <div class="table-responsive d-none d-md-block">
                         <table class="table table-hover animate__animated animate__fadeInUp" data-aos="fade-up">
                             <thead>
                                 <tr>
@@ -35,7 +31,13 @@
                                 {% for client in clients %}
                                 <tr class="{% if selected_pk|default:''|add:'' == client.pk|stringformat:'s' %}table-row-active bg-purple-selected{% endif %}">
                                     <td>
-                                        <a href="?selected={{ client.pk }}" class="text-purple">
+                                        <a href="?selected={{ client.pk }}"
+                                           class="text-purple"
+                                           hx-get="?selected={{ client.pk }}"
+                                           hx-target="#clientDetail"
+                                           hx-swap="innerHTML"
+                                           hx-push-url="true"
+                                           hx-indicator=".loading-indicator">
                                             <strong>{{ client.nickname }}</strong>
                                         </a>
                                     </td>
@@ -98,7 +100,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="detail-panel flex-grow-1" id="clientDetail">
+        <div class="loading-indicator d-none"></div>
         {% if selected_client %}
             {% include 'commissions/_client_panel.html' %}
         {% else %}
