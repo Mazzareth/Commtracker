@@ -13,11 +13,52 @@
     --sidebar-link-hover: var(--brand-purple-light, #d1a3ff);
 }
 
+/* ...sidebar styles... */
+
 .app-shell {
     display: flex;
     min-height: 100vh;
     width: 100vw;
     background: var(--bg-black, #000);
+}
+
+/* --- Master-Detail Panel Layout --- */
+.panel-container {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.list-panel {
+    max-width: 350px;
+    min-width: 0;
+    flex: 0 0 350px;
+    width: 100%;
+}
+
+.detail-panel {
+    flex: 1 1 0%;
+    min-width: 0;
+    width: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .panel-container {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+    .list-panel,
+    .detail-panel {
+        max-width: 100%;
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}
+
+/* Hide Bootstrap navbar if exists */
+.navbar, .glass-navbar {
+    display: none !important;
 }
 
 #sidebar {

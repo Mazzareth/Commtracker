@@ -42,6 +42,10 @@ def commission_list(request):
         'notes': notes,
         'selected_pk': selected_pk,
     }
+
+    if request.headers.get('HX-Request'):
+        # Only render the panel partial so HTMX swaps it in
+        return render(request, 'commissions/_commission_panel.html', context)
     return render(request, 'commissions/commission_list.html', context)
 
 
@@ -89,13 +93,17 @@ def client_list(request):
             notes = selected_client.client_notes.all().order_by('-created_at')
             client_note_form = ClientNoteForm()
 
-    return render(request, 'commissions/client_list.html', {
+    context = {
         'clients': clients,
         'selected_client': selected_client,
         'client_note_form': client_note_form,
         'notes': notes,
         'selected_pk': valid_selected_pk,
-    })
+    }
+    if request.headers.get('HX-Request'):
+        # Only render the panel partial so HTMX swaps it in
+        return render(request, 'commissions/_client_panel.html', context)
+    return render(request, 'commissions/client_list.html', context)
 
 def client_create(request):
     if request.method == 'POST':
