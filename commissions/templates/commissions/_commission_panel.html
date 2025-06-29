@@ -94,10 +94,12 @@
             <li class="list-group-item text-muted">No notes yet.</li>
             {% endfor %}
         </ul>
+        {% if selected_commission and selected_commission.pk %}
         <form action="{% url 'commissions:commission_add_note' selected_commission.pk %}" method="post" class="d-flex gap-2">
             {% csrf_token %}
             {{ commission_note_form.content }}
             <button type="submit" class="btn btn-purple btn-sm">Add</button>
         </form>
+        {% endif %}
     </div>
 </div>
