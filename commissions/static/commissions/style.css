@@ -1,0 +1,12 @@
+.table-row-active {
+    font-weight: bold;
+    background-color: #f6ecfa !important;
+}
+.bg-purple-selected {
+    background-color: #f6ecfa !important;
+}
+.note-edit-link {
+    color: #8e44ad;
+    font-size: 0.9em;
+    margin-left: 8px;
+}

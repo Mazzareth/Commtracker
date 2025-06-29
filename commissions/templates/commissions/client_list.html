@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-md-4">
         <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 {% if clients %}
@@ -29,14 +29,13 @@
                                     <th>Email</th>
                                     <th>Notes</th>
                                     <th>Joined</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for client in clients %}
-                                <tr>
+                                <tr class="{% if selected_pk|default:''|add:'' == client.pk|stringformat:'s' %}table-row-active bg-purple-selected{% endif %}">
                                     <td>
-                                        <a href="{% url 'commissions:client_detail' client.pk %}" class="text-purple">
+                                        <a href="?selected={{ client.pk }}" class="text-purple">
                                             <strong>{{ client.nickname }}</strong>
                                         </a>
                                     </td>
@@ -56,11 +55,6 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ client.created_at|date:"M d, Y" }}</td>
-                                    <td>
-                                        <a href="{% url 'commissions:client_detail' client.pk %}" class="btn btn-outline-purple btn-sm" title="View">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -78,6 +72,18 @@
                 {% endif %}
             </div>
         </div>
+    </div>
+    <div class="col-md-8">
+        {% if selected_client %}
+            {% include 'commissions/_client_panel.html' %}
+        {% else %}
+            <div class="card h-100 d-flex align-items-center justify-content-center">
+                <div class="card-body text-center text-muted">
+                    <i class="fas fa-arrow-left fa-2x mb-2"></i>
+                    <p>Select a client from the list to view details.</p>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,103 @@
+<div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+            <i class="fas fa-file-alt me-2"></i>{{ selected_commission.title }}
+        </h2>
+        <a href="/admin/commissions/commission/{{ selected_commission.pk }}/change/" class="btn btn-outline-purple btn-sm">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-sm-3">
+                <strong>Client Name:</strong>
+            </div>
+            <div class="col-sm-9">
+                {% if selected_commission.client %}
+                    <a href="?selected={{ selected_commission.client.pk }}" class="text-purple">
+                        {{ selected_commission.client.nickname }}
+                    </a>
+                {% else %}
+                    <span class="text-muted">—</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Status:</strong></div>
+            <div class="col-sm-9">
+                <span class="badge 
+                    {% if selected_commission.status == 'pending' %}bg-warning text-dark
+                    {% elif selected_commission.status == 'in_progress' %}bg-info
+                    {% elif selected_commission.status == 'completed' %}bg-success
+                    {% else %}bg-secondary
+                    {% endif %} fs-6">
+                    {{ selected_commission.get_status_display }}
+                </span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Amount:</strong></div>
+            <div class="col-sm-9">
+                <span class="h5 text-success">${{ selected_commission.amount }}</span>
+            </div>
+        </div>
+        {% if selected_commission.description %}
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Description:</strong></div>
+            <div class="col-sm-9">
+                {{ selected_commission.description|linebreaks }}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Created:</strong></div>
+            <div class="col-sm-9">{{ selected_commission.created_at|date:"M d, Y H:i" }}</div>
+        </div>
+        {% if selected_commission.due_date %}
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Due Date:</strong></div>
+            <div class="col-sm-9">{{ selected_commission.due_date|date:"M d, Y" }}</div>
+        </div>
+        {% endif %}
+        {% if selected_commission.completed_date %}
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Completed:</strong></div>
+            <div class="col-sm-9 text-success">{{ selected_commission.completed_date|date:"M d, Y" }}</div>
+        </div>
+        {% endif %}
+        {% if selected_commission.notes %}
+        <div class="row mb-3">
+            <div class="col-sm-3"><strong>Notes:</strong></div>
+            <div class="col-sm-9">{{ selected_commission.notes|linebreaks }}</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<div class="card mt-3 animate__animated animate__fadeInUp" data-aos="fade-up">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>
+            <i class="fas fa-sticky-note me-2"></i>Notes
+        </span>
+    </div>
+    <div class="card-body">
+        <ul class="list-group mb-3">
+            {% for note in notes %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                    {{ note.content|linebreaks }}
+                    <br>
+                    <small class="text-muted">{{ note.created_at|date:"M d, Y H:i" }}</small>
+                </div>
+                <a href="{% url 'commissions:commission_edit_note' note.pk %}" class="note-edit-link" title="Edit"><i class="fas fa-edit"></i></a>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No notes yet.</li>
+            {% endfor %}
+        </ul>
+        <form action="{% url 'commissions:commission_add_note' selected_commission.pk %}" method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            {{ commission_note_form.content }}
+            <button type="submit" class="btn btn-purple btn-sm">Add</button>
+        </form>
+    </div>
+</div>

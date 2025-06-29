@@ -17,10 +17,27 @@ class Character(models.Model):
     name = models.CharField(max_length=100)
     client = models.ForeignKey(Client, related_name='characters', on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField(blank=True)
-    reference_url = models.URLField(blank=True)
+    reference_url = models.URLField(blank=True)  # Deprecated - for migration only
+    reference_file = models.ImageField(upload_to='character_references/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} ({self.client.nickname})"
+
+class ClientNote(models.Model):
+    client = models.ForeignKey(Client, related_name='notes', on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"Note for {self.client.nickname} ({self.created_at})"
+
+class CommissionNote(models.Model):
+    commission = models.ForeignKey('Commission', related_name='notes', on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"Note for {self.commission.title} ({self.created_at})"
 
 class Tag(models.Model):
     """Tags for categorizing commissions (e.g. Swimming, 2 Character, etc)."""

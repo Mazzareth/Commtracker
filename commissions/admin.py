@@ -1,4 +1,26 @@
 from django.contrib import admin
+from .models import Client, Character, Tag, Commission, ClientNote, CommissionNote
+
+class ClientNoteInline(admin.StackedInline):
+    model = ClientNote
+    extra = 0
+
+class CommissionNoteInline(admin.StackedInline):
+    model = CommissionNote
+    extra = 0
+
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    inlines = [ClientNoteInline]
+    list_display = ('nickname', 'handle', 'email', 'created_at')
+
+@admin.register(Commission)
+class CommissionAdmin(admin.ModelAdmin):
+    inlines = [CommissionNoteInline]
+    list_display = ('title', 'client', 'amount', 'status', 'created_at')
+
+admin.site.register(Character)
+admin.site.register(Tag)
 from .models import Commission
 
 @admin.register(Commission)
