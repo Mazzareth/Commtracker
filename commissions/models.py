@@ -24,16 +24,13 @@ class Character(models.Model):
         return f"{self.name} ({self.client.nickname})"
 
 class ClientNote(models.Model):
-    client = models.ForeignKey(Client, related_name='notes', on_delete=models.CASCADE)
-    content = models.TextField()
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client_notes')
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"Note for {self.client.nickname} ({self.created_at})"
 
 class CommissionNote(models.Model):
-    commission = models.ForeignKey('Commission', related_name='notes', on_delete=models.CASCADE)
-    content = models.TextField()
+    commission = models.ForeignKey(Commission, on_delete=models.CASCADE, related_name='commission_notes')
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):

@@ -30,7 +30,7 @@ def commission_list(request):
     if selected_pk:
         selected_commission = commissions.filter(pk=selected_pk).first()
         if selected_commission:
-            notes = selected_commission.notes.all().order_by('-created_at')
+            notes = selected_commission.commission_notes.all().order_by('-created_at')
             commission_note_form = CommissionNoteForm()
     context = {
         'commissions': commissions,
@@ -75,7 +75,7 @@ def client_list(request):
     if selected_pk:
         selected_client = Client.objects.filter(pk=selected_pk).first()
         if selected_client:
-            notes = selected_client.notes.all().order_by('-created_at')
+            notes = selected_client.client_notes.all().order_by('-created_at')
             client_note_form = ClientNoteForm()
     return render(request, 'commissions/client_list.html', {
         'clients': clients,
