@@ -111,7 +111,8 @@ def client_create(request):
         if form.is_valid():
             client = form.save()
             messages.success(request, "Client created successfully.")
-            return redirect('commissions:client_detail', pk=client.pk)
+            # Redirect to the list view with new client selected
+            return redirect(f'/commissions/clients/?selected={client.pk}')
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -140,7 +141,8 @@ def commission_create_for_client(request, pk):
             commission.save()
             form.save_m2m()
             messages.success(request, "Commission created and assigned to client.")
-            return redirect('commissions:commission_detail', pk=commission.pk)
+            # Redirect to the commissions list with new commission selected
+            return redirect(f'/commissions/?selected={commission.pk}')
         else:
             messages.error(request, "Please correct the errors below.")
     else:
