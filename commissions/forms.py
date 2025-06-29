@@ -12,7 +12,7 @@ class ClientForm(forms.ModelForm):
 class CommissionForm(forms.ModelForm):
     class Meta:
         model = Commission
-        exclude = ['client']
+        fields = "__all__"
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
             'notes': forms.Textarea(attrs={'rows': 2}),

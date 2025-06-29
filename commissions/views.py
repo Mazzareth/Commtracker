@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.db.models import Q
+from django.urls import reverse
 from .models import Commission, Client, Character, ClientNote, CommissionNote
 from .forms import ClientForm, CommissionForm, CharacterForm, ClientNoteForm, CommissionNoteForm
 
@@ -163,6 +164,28 @@ def commission_create_for_client(request, pk):
         'form_title': f'Add Commission for {client.nickname}',
         'client': client,
         'hide_client_field': True,
+        'cancel_url': reverse('commissions:client_detail', args=[client.pk]),
+    })
+
+# ----- Add commission (first-class "Add Commission" flow) -----
+
+def commission_create(request):
+    if request.method == 'POST':
+        form = CommissionForm(request.POST)
+        if form.is_valid():
+            commission = form.save()
+            messages.success(request, "Commission created successfully.")
+            # Redirect to commissions list with new commission selected
+            return redirect(f'/commissions/?selected={commission.pk}')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = CommissionForm()
+    return render(request, 'commissions/commission_form.html', {
+        'form': form,
+        'form_title': 'Add Commission',
+        'hide_client_field': False,
+        'cancel_url': reverse('commissions:commission_list'),
     })
 
 # ----- Add character for client -----
