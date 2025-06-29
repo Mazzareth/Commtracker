@@ -13,6 +13,34 @@
                 <i class="fas fa-plus me-1"></i>Add Commission
             </a>
         </div>
+        <!-- Filter Card: Slim collapsible above the table -->
+        <div class="card mb-3 border rounded-xl shadow-sm" style="background:rgba(30,30,40,0.7);">
+            <div class="card-body py-2">
+                <form method="get" class="row g-2 align-items-end">
+                    <div class="col-12 col-md-6">
+                        <label for="search" class="form-label mb-0 small">Search</label>
+                        <input type="text" class="form-control form-control-sm" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Search by title, client, or description...">
+                    </div>
+                    <div class="col-8 col-md-4">
+                        <label for="status" class="form-label mb-0 small">Status</label>
+                        <select class="form-select form-select-sm" id="status" name="status">
+                            <option value="">All Statuses</option>
+                            {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-4 col-md-2 d-grid">
+                        <button type="submit" class="btn btn-outline-purple btn-sm mt-2 mt-md-0">
+                            <i class="fas fa-search me-1"></i>Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 {% if commissions %}
@@ -36,7 +64,8 @@
                                            hx-get="?selected={{ commission.pk }}"
                                            hx-target="#commissionDetail"
                                            hx-swap="innerHTML"
-                                           hx-push-url="true">
+                                           hx-push-url="true"
+                                           hx-indicator=".loading-indicator">
                                             <strong>{{ commission.title }}</strong>
                                         </a>
                                         {% if commission.description %}
@@ -142,6 +171,7 @@
         </div>
     </div>
     <div class="detail-panel flex-grow-1" id="commissionDetail">
+        <div class="loading-indicator d-none"></div>
         {% if selected_commission %}
             {% include 'commissions/_commission_panel.html' %}
         {% else %}
