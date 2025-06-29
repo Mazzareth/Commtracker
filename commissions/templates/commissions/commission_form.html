@@ -28,7 +28,7 @@
                         {% endif %}
                     {% endfor %}
                     <div class="d-flex justify-content-between">
-                        <a href="{% url 'commissions:client_detail' client.pk %}" class="btn btn-outline-secondary">
+                        <a href="{{ cancel_url }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left"></i> Cancel
                         </a>
                         <button type="submit" class="btn btn-purple">

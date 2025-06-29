@@ -25,15 +25,15 @@
 /* --- Master-Detail Panel Layout --- */
 .panel-container {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     width: 100%;
     align-items: flex-start;
     flex-wrap: wrap;
 }
 .list-panel {
-    max-width: 350px;
+    max-width: 400px;
     min-width: 0;
-    flex: 0 0 350px;
+    flex: 0 0 400px;
     width: 100%;
 }
 
@@ -316,4 +316,9 @@ main.flex-grow-1 {
 /* Hide Bootstrap navbar if exists */
 .navbar, .glass-navbar {
     display: none !important;
+}
+
+main.flex-grow-1 {
+    padding-left: 1rem;
+    padding-right: 1rem;
 }

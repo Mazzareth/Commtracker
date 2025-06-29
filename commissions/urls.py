@@ -6,6 +6,7 @@ app_name = 'commissions'
 urlpatterns = [
     path('', views.home, name='home'),
     path('commissions/', views.commission_list, name='commission_list'),
+    path('commissions/add/', views.commission_create, name='commission_create'),
     path('commissions/<int:pk>/', views.commission_detail, name='commission_detail'),
     path('clients/', views.client_list, name='client_list'),
     path('clients/add/', views.client_create, name='client_create'),
