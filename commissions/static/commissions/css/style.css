@@ -8,8 +8,327 @@
     --navbar-dark: #121212;
     --text-light: #f5f5f5;
     --text-muted: #b3b3b3;
-    --transition-base: 0.2s cubic-bezier(.4,0,.2,1);
+    --transition-base: 0.25s cubic-bezier(.4,0,.2,1);
     --shadow-purple: 0 2px 12px 0 #bb86fc40;
+    --glass-bg: rgba(255,255,255,0.05);
+}
+
+/* --- UI/UX Overhaul: Inter font, global smooth font rendering --- */
+body,
+.font-inter {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'calt' 1;
+}
+
+body.bg-black {
+    background: var(--bg-black) !important;
+    color: var(--text-light);
+}
+
+/* --- Glassmorphism Utility --- */
+.glass, .card, .modal, .glass-navbar, .navbar, .table, .form-control, .form-select {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid var(--brand-purple-border) !important;
+    box-shadow: 0 2px 20px 0 #0e001e40;
+}
+.glass {
+    border-radius: 1rem;
+}
+.card, .modal {
+    border-radius: 1rem;
+}
+
+/* --- Glass Navbar --- */
+.glass-navbar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    border-bottom: 1px solid var(--brand-purple-border) !important;
+    box-shadow: 0 8px 24px 0 #1a002040;
+    transition: background var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* Navbar brand accent and nav links */
+.navbar-brand,
+.navbar .navbar-brand {
+    color: var(--brand-purple) !important;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.navbar-brand .fa-chart-line {
+    color: var(--brand-purple) !important;
+}
+.navbar-nav .nav-link.active, .navbar-nav .nav-link:focus, .navbar-nav .nav-link:hover {
+    color: var(--brand-purple-light) !important;
+    transition: color var(--transition-base);
+}
+
+/* Navbar toggler accessibility */
+.navbar-toggler[aria-label] {
+    outline: none;
+    border-radius: 0.5rem;
+}
+
+.text-light { color: var(--text-light) !important; }
+.text-purple { color: var(--brand-purple) !important; }
+
+/* Cards */
+.card {
+    background: var(--glass-bg) !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--brand-purple-border) !important;
+    border-radius: 1rem;
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+    box-shadow: 0 2px 20px 0 #0e001e40, var(--shadow-purple);
+}
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--brand-purple-border) !important;
+}
+.card:hover, .table-hover tbody tr:hover, .form-control:focus, .form-select:focus {
+    box-shadow: 0 8px 32px 0 var(--brand-purple-border), 0 2px 20px 0 var(--brand-purple-border), var(--shadow-purple);
+    transform: translateY(-6px) scale(1.01);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+/* Utility: animated glow for cards on hover */
+.card,
+.mobile-card {
+    transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+}
+.card:hover, .mobile-card:hover {
+    box-shadow: 0 4px 32px 0 var(--brand-purple-border), 0 2px 20px 0 var(--brand-purple-border), var(--shadow-purple);
+    border-color: var(--brand-purple);
+    transform: translateY(-6px) scale(1.01);
+    z-index: 2;
+}
+
+/* --- Mobile Card List Utility Classes --- */
+.mobile-card-list {
+    display: block;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+}
+.mobile-card {
+    background: var(--glass-bg);
+    border-radius: 1rem;
+    padding: 1.25rem 1rem 1rem 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px 0 var(--brand-purple-border);
+    border: 1px solid var(--brand-purple-border);
+    position: relative;
+    transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+    color: var(--text-light);
+}
+.mobile-card .badge {
+    font-size: 0.96em;
+    margin-left: 0.5rem;
+}
+.mobile-card .stretched-link {
+    z-index: 1;
+}
+.mobile-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brand-purple);
+    margin-bottom: 0.35rem;
+}
+.mobile-card .card-meta {
+    font-size: 0.97em;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+.mobile-card .card-amt {
+    font-size: 1.08rem;
+    font-weight: 600;
+}
+.mobile-card .card-notes {
+    font-size: 0.98em;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+/* Responsive Utilities */
+@media (min-width: 768px) {
+    .mobile-card-list { display: none !important; }
+    .table-responsive { display: block !important; }
+}
+@media (max-width: 767.98px) {
+    .mobile-card-list { display: block !important; }
+    .table-responsive { display: none !important; }
+}
+
+/* Buttons */
+.btn-purple,
+.btn.btn-purple {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    border: 1px solid var(--brand-purple);
+    transition: background var(--transition-base), color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+    box-shadow: none;
+}
+.btn-purple:hover, .btn-purple:focus {
+    background: var(--brand-purple-light) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border), 0 4px 16px 0 var(--brand-purple);
+    transform: translateY(-2px) scale(1.03);
+}
+.btn-outline-purple,
+.btn.btn-outline-purple {
+    background: transparent !important;
+    color: var(--brand-purple) !important;
+    border: 1px solid var(--brand-purple);
+    transition: background var(--transition-base), color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+}
+.btn-outline-purple:hover, .btn-outline-purple:focus {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border), 0 4px 16px 0 var(--brand-purple);
+    transform: translateY(-2px) scale(1.03);
+}
+
+/* Bootstrap button overrides - map primary to purple for legacy */
+.btn-primary, .btn.btn-primary {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    border: 1px solid var(--brand-purple) !important;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background: var(--brand-purple-light) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border), 0 4px 16px 0 var(--brand-purple);
+}
+
+.btn-outline-primary, .btn.btn-outline-primary {
+    background: transparent !important;
+    color: var(--brand-purple) !important;
+    border: 1px solid var(--brand-purple) !important;
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background: var(--brand-purple) !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border), 0 4px 16px 0 var(--brand-purple);
+}
+
+/* Secondary/outline-secondary: gray */
+.btn-outline-secondary, .btn.btn-outline-secondary {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid #444 !important;
+}
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+    background: #222 !important;
+    color: var(--text-light) !important;
+}
+
+/* Table & Form Styling */
+.table, .table-hover tbody tr {
+    background: var(--glass-bg) !important;
+    color: var(--text-light) !important;
+    border-color: var(--brand-purple-border);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.table thead th, .table th {
+    color: var(--brand-purple) !important;
+    border-bottom: 2px solid var(--brand-purple-border);
+}
+.table td, .table th {
+    border-color: var(--brand-purple-border) !important;
+}
+.table-hover tbody tr:hover {
+    background: #232323 !important;
+}
+
+/* Form controls */
+.form-control, .form-select {
+    background: var(--glass-bg) !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--brand-purple-border) !important;
+    transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+    border-radius: 0.7rem;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--brand-purple) !important;
+    box-shadow: 0 0 0 0.2rem var(--brand-purple-border) !important;
+    background: var(--glass-bg);
+    color: var(--text-light);
+    outline: none;
+}
+
+/* Badges - color coded for status, but purple for "Total" */
+.badge.bg-warning, .badge.bg-info, .badge.bg-success, .badge.bg-secondary {
+    color: #000 !important;
+    font-weight: 600;
+    background: var(--brand-purple) !important;
+    border: 1px solid var(--brand-purple-border);
+}
+.badge.bg-warning.text-dark { background: #fbc02d !important; color: #000 !important; }
+.badge.bg-info { background: #29b6f6 !important; color: #fff !important; }
+.badge.bg-success { background: #66bb6a !important; color: #fff !important; }
+.badge.bg-secondary { background: #616161 !important; color: #fff !important; }
+.badge.bg-primary { background: var(--brand-purple) !important; color: #000 !important; }
+
+/* Alert override */
+.alert {
+    background: #191927 !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--brand-purple-border);
+}
+
+/* Animations and AOS fade-up support */
+[data-aos="fade-up"] {
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-duration: 0.6s;
+}
+[data-aos="fade-up"].aos-animate {
+    opacity: 1;
+    transform: translateY(0px);
+}
+.animate__animated.animate__fadeInUp {
+    animation-duration: 0.8s;
+    animation-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+/* Utility */
+.rounded-xl { border-radius: 1rem !important; }
+.shadow-purple { box-shadow: 0 2px 20px 0 var(--brand-purple-border) !important; }
+
+/* Misc */
+a, a.text-decoration-none {
+    color: var(--brand-purple);
+    transition: color var(--transition-base);
+}
+a:hover { color: var(--brand-purple-light); }
+::-webkit-scrollbar {
+    background: #191919;
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--brand-purple-border);
+    border-radius: 6px;
+}
+
+/* --- Genie: Table row and note highlights for master-detail and notes --- */
+.table-row-active {
+    font-weight: bold;
+    background-color: #f6ecfa !important;
+}
+.bg-purple-selected {
+    background-color: #f6ecfa !important;
+}
+.note-edit-link {
+    color: #8e44ad;
+    font-size: 0.9em;
+    margin-left: 8px;
 }
 
 /* General */
