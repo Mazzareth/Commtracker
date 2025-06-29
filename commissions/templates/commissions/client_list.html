@@ -60,6 +60,31 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- Mobile Card List (shown < md) -->
+                    <div class="mobile-card-list d-md-none">
+                        {% for client in clients %}
+                        <div class="mobile-card position-relative mb-3 shadow-purple">
+                            <a href="?selected={{ client.pk }}" class="stretched-link" tabindex="0" aria-label="View client details: {{ client.nickname }}"></a>
+                            <div class="card-title mb-1">{{ client.nickname }}</div>
+                            <div class="card-meta mb-1">
+                                {% if client.handle %}
+                                    <span class="me-2"><i class="fas fa-at me-1"></i>{{ client.handle }}</span>
+                                {% endif %}
+                                {% if client.email %}
+                                    <span class="ms-2"><i class="fas fa-envelope me-1"></i>{{ client.email }}</span>
+                                {% endif %}
+                            </div>
+                            {% if client.notes %}
+                                <div class="card-notes mb-1">
+                                    <i class="fas fa-sticky-note me-1"></i>{{ client.notes|truncatechars:40 }}
+                                </div>
+                            {% endif %}
+                            <div class="mb-1">
+                                <span class="card-meta"><i class="fas fa-calendar-plus me-1"></i>{{ client.created_at|date:"M d, Y" }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <div class="text-center py-5">
                         <i class="fas fa-user-friends fa-3x text-muted mb-3"></i>

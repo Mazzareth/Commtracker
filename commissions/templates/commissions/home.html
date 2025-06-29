@@ -124,6 +124,32 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- Mobile Card List (shown < md) -->
+                    <div class="mobile-card-list d-md-none">
+                        {% for commission in recent_commissions %}
+                        <div class="mobile-card position-relative mb-3 shadow-purple">
+                            <a href="{% url 'commissions:commission_detail' commission.pk %}" class="stretched-link" tabindex="0" aria-label="View commission details: {{ commission.title }}"></a>
+                            <div class="card-title mb-1">{{ commission.title }}</div>
+                            <div class="card-meta mb-1">
+                                <i class="fas fa-user me-1"></i>{{ commission.client_name }}
+                            </div>
+                            <div class="card-amt mb-1">
+                                <i class="fas fa-dollar-sign me-1"></i>${{ commission.amount }}
+                            </div>
+                            <div class="mb-1">
+                                <span class="badge 
+                                    {% if commission.status == 'pending' %}bg-warning text-dark
+                                    {% elif commission.status == 'in_progress' %}bg-info
+                                    {% elif commission.status == 'completed' %}bg-success
+                                    {% else %}bg-secondary
+                                    {% endif %}">
+                                    {{ commission.get_status_display }}
+                                </span>
+                                <span class="card-meta ms-2"><i class="fas fa-calendar-alt me-1"></i>{{ commission.created_at|date:"M d, Y" }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <div class="text-center py-4">
                         <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
