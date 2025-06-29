@@ -52,7 +52,7 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-md-4">
         <div class="card animate__animated animate__fadeInUp" data-aos="fade-up">
             <div class="card-body">
                 {% if commissions %}
@@ -65,24 +65,24 @@
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Due Date</th>
-                                    <th>Created</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for commission in commissions %}
-                                <tr>
+                                <tr class="{% if selected_pk|default:''|add:'' == commission.pk|stringformat:'s' %}table-row-active bg-purple-selected{% endif %}">
                                     <td>
-                                        <strong>{{ commission.title }}</strong>
+                                        <a href="?selected={{ commission.pk }}" class="text-purple">
+                                            <strong>{{ commission.title }}</strong>
+                                        </a>
                                         {% if commission.description %}
                                             <br><small class="text-muted">{{ commission.description|truncatechars:50 }}</small>
                                         {% endif %}
                                     </td>
                                     <td>
                                         {% if commission.client %}
-                                            <a href="{% url 'commissions:client_detail' commission.client.pk %}" class="text-purple">
+                                            <span class="text-purple">
                                                 <strong>{{ commission.client.nickname }}</strong>
-                                            </a>
+                                            </span>
                                             {% if commission.client.handle %}
                                                 <br><small class="text-muted">{{ commission.client.handle }}</small>
                                             {% endif %}
@@ -111,19 +111,6 @@
                                             <span class="text-muted">Not set</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ commission.created_at|date:"M d, Y" }}</td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="{% url 'commissions:commission_detail' commission.pk %}" 
-                                               class="btn btn-outline-purple" title="View Details">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="/admin/commissions/commission/{{ commission.pk }}/change/" 
-                                               class="btn btn-outline-secondary" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </div>
-                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -148,6 +135,18 @@
                 {% endif %}
             </div>
         </div>
+    </div>
+    <div class="col-md-8">
+        {% if selected_commission %}
+            {% include 'commissions/_commission_panel.html' %}
+        {% else %}
+            <div class="card h-100 d-flex align-items-center justify-content-center">
+                <div class="card-body text-center text-muted">
+                    <i class="fas fa-arrow-left fa-2x mb-2"></i>
+                    <p>Select a commission from the list to view details.</p>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

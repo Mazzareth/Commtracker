@@ -152,3 +152,44 @@ WantedBy=multi-user.target
 - The updater app is included in `INSTALLED_APPS` and its URLs are wired at the root.
 - Webhook endpoint: `/github-webhook/`
 - Polling command: `python manage.py github_auto_updater --interval 60` (run as a service for continuous polling).
+
+---
+
+## Additional Requirements & Features
+
+### File Uploads
+
+- **Pillow** is required for file/image uploads via Django's `ImageField`.
+  - Install with:
+    ```bash
+    pip install Pillow
+    ```
+- Uploaded character reference files are stored in `MEDIA_ROOT/character_references/`.
+- If you haven't set up `MEDIA_ROOT` and `MEDIA_URL`, add them to your Django settings for file upload support:
+    ```python
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / "media"
+    ```
+  And ensure these are served in development with:
+    ```python
+    from django.conf import settings
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ```
+
+### Migrations
+
+- After updating models, run:
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+### Static Files
+
+- Run `python manage.py collectstatic` after static/style changes.
+
+### Notes System
+
+- You can now add, edit, and list multiple notes for Clients and Commissions directly from the list panel UI.
+- Notes are timestamped and support quick inline add and edit.

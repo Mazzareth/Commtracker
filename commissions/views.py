@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.db.models import Q
-from .models import Commission, Client, Character
-from .forms import ClientForm, CommissionForm, CharacterForm
+from .models import Commission, Client, Character, ClientNote, CommissionNote
+from .forms import ClientForm, CommissionForm, CharacterForm, ClientNoteForm, CommissionNoteForm
 
 def commission_list(request):
     commissions = Commission.objects.all()
@@ -23,11 +23,24 @@ def commission_list(request):
     if status_filter:
         commissions = commissions.filter(status=status_filter)
 
+    selected_pk = request.GET.get("selected")
+    selected_commission = None
+    commission_note_form = None
+    notes = None
+    if selected_pk:
+        selected_commission = commissions.filter(pk=selected_pk).first()
+        if selected_commission:
+            notes = selected_commission.notes.all().order_by('-created_at')
+            commission_note_form = CommissionNoteForm()
     context = {
         'commissions': commissions,
         'search_query': search_query,
         'status_filter': status_filter,
         'status_choices': Commission.STATUS_CHOICES,
+        'selected_commission': selected_commission,
+        'commission_note_form': commission_note_form,
+        'notes': notes,
+        'selected_pk': selected_pk,
     }
     return render(request, 'commissions/commission_list.html', context)
 
@@ -55,7 +68,22 @@ def home(request):
 
 def client_list(request):
     clients = Client.objects.all().order_by('-created_at')
-    return render(request, 'commissions/client_list.html', {'clients': clients})
+    selected_pk = request.GET.get("selected")
+    selected_client = None
+    client_note_form = None
+    notes = None
+    if selected_pk:
+        selected_client = Client.objects.filter(pk=selected_pk).first()
+        if selected_client:
+            notes = selected_client.notes.all().order_by('-created_at')
+            client_note_form = ClientNoteForm()
+    return render(request, 'commissions/client_list.html', {
+        'clients': clients,
+        'selected_client': selected_client,
+        'client_note_form': client_note_form,
+        'notes': notes,
+        'selected_pk': selected_pk,
+    })
 
 def client_create(request):
     if request.method == 'POST':
@@ -109,7 +137,7 @@ def commission_create_for_client(request, pk):
 def character_create_for_client(request, pk):
     client = get_object_or_404(Client, pk=pk)
     if request.method == 'POST':
-        form = CharacterForm(request.POST)
+        form = CharacterForm(request.POST, request.FILES)
         if form.is_valid():
             character = form.save(commit=False)
             character.client = client
@@ -126,3 +154,57 @@ def character_create_for_client(request, pk):
         'client': client,
         'hide_client_field': True,
     })
+
+# --- Notes views ---
+
+from django.views.decorators.http import require_POST
+
+@require_POST
+def client_add_note(request, pk):
+    client = get_object_or_404(Client, pk=pk)
+    form = ClientNoteForm(request.POST)
+    if form.is_valid():
+        note = form.save(commit=False)
+        note.client = client
+        note.save()
+        messages.success(request, "Note added.")
+    else:
+        messages.error(request, "Could not add note.")
+    return redirect(f"{request.META.get('HTTP_REFERER','/commissions/clients/')}?selected={client.pk}")
+
+def client_edit_note(request, note_pk):
+    note = get_object_or_404(ClientNote, pk=note_pk)
+    if request.method == 'POST':
+        form = ClientNoteForm(request.POST, instance=note)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Note updated.")
+            return redirect(f"{request.META.get('HTTP_REFERER','/commissions/clients/')}?selected={note.client.pk}")
+    else:
+        form = ClientNoteForm(instance=note)
+    return render(request, 'commissions/edit_note.html', {'form': form, 'note': note, 'is_client': True})
+
+@require_POST
+def commission_add_note(request, pk):
+    commission = get_object_or_404(Commission, pk=pk)
+    form = CommissionNoteForm(request.POST)
+    if form.is_valid():
+        note = form.save(commit=False)
+        note.commission = commission
+        note.save()
+        messages.success(request, "Note added.")
+    else:
+        messages.error(request, "Could not add note.")
+    return redirect(f"{request.META.get('HTTP_REFERER','/commissions/')}?selected={commission.pk}")
+
+def commission_edit_note(request, note_pk):
+    note = get_object_or_404(CommissionNote, pk=note_pk)
+    if request.method == 'POST':
+        form = CommissionNoteForm(request.POST, instance=note)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Note updated.")
+            return redirect(f"{request.META.get('HTTP_REFERER','/commissions/')}?selected={note.commission.pk}")
+    else:
+        form = CommissionNoteForm(instance=note)
+    return render(request, 'commissions/edit_note.html', {'form': form, 'note': note, 'is_client': False})
