@@ -72,17 +72,29 @@ def client_list(request):
     selected_client = None
     client_note_form = None
     notes = None
+
+    # Validate selected_pk to be a proper integer (or None)
+    valid_selected_pk = None
     if selected_pk:
-        selected_client = Client.objects.filter(pk=selected_pk).first()
+        # Sometimes selected_pk can be of the form '1?selected=1'; take only the numeric part
+        raw_pk = selected_pk.split('?')[0].split('&')[0]
+        try:
+            valid_selected_pk = int(raw_pk)
+        except (ValueError, TypeError):
+            valid_selected_pk = None
+
+    if valid_selected_pk is not None:
+        selected_client = Client.objects.filter(pk=valid_selected_pk).first()
         if selected_client:
             notes = selected_client.client_notes.all().order_by('-created_at')
             client_note_form = ClientNoteForm()
+
     return render(request, 'commissions/client_list.html', {
         'clients': clients,
         'selected_client': selected_client,
         'client_note_form': client_note_form,
         'notes': notes,
-        'selected_pk': selected_pk,
+        'selected_pk': valid_selected_pk,
     })
 
 def client_create(request):
