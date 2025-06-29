@@ -27,11 +27,22 @@ def commission_list(request):
     selected_commission = None
     commission_note_form = None
     notes = None
+
+    # Sanitize selected_pk to be a proper integer (or None)
+    valid_selected_pk = None
     if selected_pk:
-        selected_commission = commissions.filter(pk=selected_pk).first()
+        raw_pk = selected_pk.split('?')[0].split('&')[0]
+        try:
+            valid_selected_pk = int(raw_pk)
+        except (ValueError, TypeError):
+            valid_selected_pk = None
+
+    if valid_selected_pk is not None:
+        selected_commission = commissions.filter(pk=valid_selected_pk).first()
         if selected_commission:
             notes = selected_commission.commission_notes.all().order_by('-created_at')
             commission_note_form = CommissionNoteForm()
+
     context = {
         'commissions': commissions,
         'search_query': search_query,
@@ -40,11 +51,11 @@ def commission_list(request):
         'selected_commission': selected_commission,
         'commission_note_form': commission_note_form,
         'notes': notes,
-        'selected_pk': selected_pk,
+        'selected_pk': valid_selected_pk,
     }
 
-    if request.headers.get('HX-Request'):
-        # Only render the panel partial so HTMX swaps it in
+    if request.headers.get('HX-Request') and valid_selected_pk is not None:
+        # Only render the panel partial so HTMX swaps it in if a valid selection exists
         return render(request, 'commissions/_commission_panel.html', context)
     return render(request, 'commissions/commission_list.html', context)
 
@@ -100,8 +111,8 @@ def client_list(request):
         'notes': notes,
         'selected_pk': valid_selected_pk,
     }
-    if request.headers.get('HX-Request'):
-        # Only render the panel partial so HTMX swaps it in
+    if request.headers.get('HX-Request') and valid_selected_pk is not None:
+        # Only render the panel partial so HTMX swaps it in if a valid selection exists
         return render(request, 'commissions/_client_panel.html', context)
     return render(request, 'commissions/client_list.html', context)
 
