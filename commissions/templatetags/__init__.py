@@ -1,1 +1,1 @@
-# This file marks the directory as a Python package.
+"""Mark the commissions.templatetags package as a Python package."""
