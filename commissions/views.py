@@ -66,9 +66,6 @@ def home(request):
 
 # ----- Client Management -----
 
-from .forms import ClientForm, CommissionForm, CharacterForm, ClientNoteForm, CommissionNoteForm
-from .models import ClientNote, CommissionNote
-
 def client_list(request):
     clients = Client.objects.all().order_by('-created_at')
     selected_pk = request.GET.get("selected")
