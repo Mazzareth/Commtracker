@@ -202,3 +202,17 @@ a:hover { color: var(--brand-purple-light); }
     background: var(--brand-purple-border);
     border-radius: 6px;
 }
+
+/* --- Genie: Table row and note highlights for master-detail and notes --- */
+.table-row-active {
+    font-weight: bold;
+    background-color: #f6ecfa !important;
+}
+.bg-purple-selected {
+    background-color: #f6ecfa !important;
+}
+.note-edit-link {
+    color: #8e44ad;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
