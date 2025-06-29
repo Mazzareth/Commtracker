@@ -25,15 +25,21 @@ class Character(models.Model):
 
 class ClientNote(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client_notes')
-    text = models.TextField()
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        # Return a preview of the note and client nickname
+        return f"Note for {self.client.nickname} ({self.created_at})"
+
 class CommissionNote(models.Model):
-    commission = models.ForeignKey(Commission, on_delete=models.CASCADE, related_name='commission_notes')
-    text = models.TextField()
+    commission = models.ForeignKey('Commission', on_delete=models.CASCADE, related_name='commission_notes')
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
+        # Return a preview of the note and commission title
         return f"Note for {self.commission.title} ({self.created_at})"
 
 class Tag(models.Model):
